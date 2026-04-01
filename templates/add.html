@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro{% endblock %}
+
+{% block content %}
+<section id="cont">
+    <h1>Cadastro</h1>
+
+    <form method="POST">
+
+        <label>Digite seu nome:</label>
+        <input type="text" name="nome" required>
+
+        <label>Email:</label>
+        <input type="email" name="email" required>
+
+        <label>Confirmar Email:</label>
+        <input type="email" name="confirm_email" required>
+
+        <label>Senha:</label>
+        <input type="password" name="senha" minlength="8" required>
+
+        <label>Confirmar Senha:</label>
+        <input type="password" name="confirm_senha" minlength="8" required>
+
+        <label>Idioma:</label>
+        <select name="idioma">
+            <option value="pt">Português</option>
+            <option value="en">Inglês</option>
+            <option value="es">Espanhol</option>
+        </select>
+
+        <button type="submit">Cadastrar</button>
+
+    </form>
+</section>
+{% endblock %}

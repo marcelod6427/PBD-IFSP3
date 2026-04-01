@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<section id="cont">
+    <h1>Hello World</h1>
+    <img src="https://miro.medium.com/1*XzIRJGujfqAiOV2EIQgR_Q.png">
+</section>
+
+<section id="cont2">
+    <div id="conteiner">
+        <a href="{{ url_for('add') }}">Cadastro</a>
+        <a href="{{ url_for('news') }}">Notícias</a>
+    </div>
+</section>
+{% endblock %}
