@@ -1,0 +1,17 @@
+import sqlite3
+
+conn = sqlite3.connect('database.db')
+
+conn.execute('''
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL,
+    senha TEXT NOT NULL,
+    idioma TEXT
+)
+''')
+
+conn.close()
+
+print("Banco criado com sucesso!")
