@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Lista{% endblock %}
+{% block content %}
+    <h1>TODOs</h1>
+    <ul>
+    {% for todo in data %}
+        <li>{{ todo.title }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

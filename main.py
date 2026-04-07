@@ -1,8 +1,27 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 
+# 🔥 criar banco e tabela
+def init_db():
+    conn = sqlite3.connect('database.db')
+    conn.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        senha TEXT NOT NULL,
+        idioma TEXT
+    )
+    ''')
+    conn.close()
+
+init_db()
+
+
+# 🔌 conexão com banco
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -16,35 +35,39 @@ def hello_world():
 
 @app.route('/add.html', methods=['GET', 'POST'])
 def add():
-    conn = get_db_connection()
-
-    conn.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        email TEXT NOT NULL,
-        senha TEXT NOT NULL,
-        idioma TEXT
-    )
-    ''')
-
     if request.method == 'POST':
         nome = request.form.get('nome')
         email = request.form.get('email')
         senha = request.form.get('senha')
         idioma = request.form.get('idioma')
 
+        conn = get_db_connection()
+
+        # 🔍 verifica se email já existe
+        user = conn.execute(
+            'SELECT * FROM users WHERE email = ?',
+            (email,)
+        ).fetchone()
+
+        if user:
+            conn.close()
+            return render_template('error.html')
+
+        # 🔐 criptografa senha
+        senha_hash = generate_password_hash(senha)
+
+        # 💾 salva no banco
         conn.execute(
             'INSERT INTO users (nome, email, senha, idioma) VALUES (?, ?, ?, ?)',
-            (nome, email, senha, idioma)
+            (nome, email, senha_hash, idioma)
         )
 
         conn.commit()
         conn.close()
 
-        return f"Usuário {nome} cadastrado com sucesso!"
+        # 🔄 redireciona para página de sucesso
+        return render_template('success.html', nome=nome)
 
-    conn.close()
     return render_template('add.html')
 
 
@@ -52,6 +75,8 @@ def add():
 def news():
     return render_template('news.html')
 
+
+# 🔍 visualizar usuários (debug)
 @app.route('/users')
 def users():
     conn = get_db_connection()
@@ -65,5 +90,14 @@ def users():
 def page_not_found(error):
     return render_template('404.html'), 404
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+@app.route("/list")
+def list():
+    url = 'https://jsonplaceholder.typicode.com/todos'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+    return render_template('list.html', data=data)
