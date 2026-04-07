@@ -3,7 +3,6 @@ import sqlite3
 
 app = Flask(__name__)
 
-# conexão com o banco
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -19,7 +18,6 @@ def hello_world():
 def add():
     conn = get_db_connection()
 
-    # 🔥 cria tabela automaticamente
     conn.execute('''
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,8 +52,6 @@ def add():
 def news():
     return render_template('news.html')
 
-
-# 🔍 rota pra ver os usuários cadastrados
 @app.route('/users')
 def users():
     conn = get_db_connection()
@@ -69,7 +65,5 @@ def users():
 def page_not_found(error):
     return render_template('404.html'), 404
 
-
-# rodar direto pelo python (opcional)
 if __name__ == '__main__':
     app.run(debug=True)
