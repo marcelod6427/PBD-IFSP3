@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Sucesso</title>
+{% extends "base.html" %}
 
-    <!-- 🔥 Redireciona após 3 segundos -->
-    <meta http-equiv="refresh" content="3;url={{ url_for('hello_world') }}">
-</head>
-<body>
+{% block title %}Sucesso{% endblock %}
+
+{% block extra_head %}
+<meta http-equiv="refresh" content="3;url={{ url_for('hello_world') }}">
+{% endblock %}
+
+{% block content %}
     <h1>Cadastro realizado com sucesso!</h1>
     <p>Redirecionando para a página inicial em 3 segundos...</p>
-</body>
-</html>
+{% endblock %}

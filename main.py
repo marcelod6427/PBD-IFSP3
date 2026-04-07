@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 
-# 🔥 criar banco e tabela
 def init_db():
     conn = sqlite3.connect('database.db')
     conn.execute('''
@@ -20,8 +19,6 @@ def init_db():
 
 init_db()
 
-
-# 🔌 conexão com banco
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -43,7 +40,6 @@ def add():
 
         conn = get_db_connection()
 
-        # 🔍 verifica se email já existe
         user = conn.execute(
             'SELECT * FROM users WHERE email = ?',
             (email,)
@@ -53,10 +49,9 @@ def add():
             conn.close()
             return render_template('error.html')
 
-        # 🔐 criptografa senha
+        # criptografa senha
         senha_hash = generate_password_hash(senha)
 
-        # 💾 salva no banco
         conn.execute(
             'INSERT INTO users (nome, email, senha, idioma) VALUES (?, ?, ?, ?)',
             (nome, email, senha_hash, idioma)
@@ -65,7 +60,6 @@ def add():
         conn.commit()
         conn.close()
 
-        # 🔄 redireciona para página de sucesso
         return render_template('success.html', nome=nome)
 
     return render_template('add.html')
@@ -75,8 +69,6 @@ def add():
 def news():
     return render_template('news.html')
 
-
-# 🔍 visualizar usuários (debug)
 @app.route('/users')
 def users():
     conn = get_db_connection()
