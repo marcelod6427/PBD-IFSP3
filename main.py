@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+import requests
 from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
@@ -87,9 +88,10 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 @app.route("/list")
-def list():
+def lista():
     url = 'https://jsonplaceholder.typicode.com/todos'
     response = requests.get(url)
+    data = []
     if response.status_code == 200:
         data = response.json()
     return render_template('list.html', data=data)
