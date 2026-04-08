@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import requests
 from werkzeug.security import generate_password_hash
+from db import usuarios
 
 app = Flask(__name__)
 
@@ -95,3 +96,7 @@ def lista():
     if response.status_code == 200:
         data = response.json()
     return render_template('list.html', data=data)
+
+@app.route('/usuarios-json')
+def usuarios_json():
+    return usuarios
